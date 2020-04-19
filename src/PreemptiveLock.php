@@ -12,7 +12,7 @@ namespace BaAGee\RedisTools;
  * Class PreemptiveLock
  * @package BaAGee\RedisTools
  */
-final class PreemptiveLock
+final class PreemptiveLock extends RedisToolsBase
 {
     /**
      * redis key前缀
@@ -25,15 +25,6 @@ final class PreemptiveLock
     private $lockedNames = [];
 
     /**
-     * @var \Redis
-     */
-    private $redisObject = null;
-
-    /**
-     * @var RedisLock
-     */
-    private static $self = null;
-    /**
      * @var string
      */
     private static $lockSha = '';
@@ -43,40 +34,9 @@ final class PreemptiveLock
     private static $unlockSha = '';
 
     /**
-     * RedisLockR constructor.
-     */
-    private function __construct()
-    {
-    }
-
-    /**
-     *
-     */
-    private function __clone()
-    {
-
-    }
-
-    /**
-     * 获取锁对象
-     * @param $redisObject
-     * @return PreemptiveLock
-     */
-    public static function getInstance($redisObject)
-    {
-        if (self::$self == null) {
-            $self = new self();
-            $self->redisObject = $redisObject;
-            self::$self = $self;
-            self::loadLuaScript();
-        }
-        return self::$self;
-    }
-
-    /**
      * 提前加载lua 脚本到redis
      */
-    protected static function loadLuaScript()
+    protected static function loadLuaScript(): void
     {
         $lockLuaFile = __DIR__ . '/lua/lock.lua';
         $lockScript = file_get_contents($lockLuaFile);

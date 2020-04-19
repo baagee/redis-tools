@@ -1,13 +1,10 @@
-# redis-tools
-
-Redis distributed lock and current limiter
-
-结合redis实现的分布式锁和限流器
-
-
-# Redis分布式锁用法
-
-```php
+<?php
+/**
+ * Desc:
+ * User: baagee
+ * Date: 2020/4/19
+ * Time: 下午9:57
+ */
 include __DIR__ . '/../vendor/autoload.php';
 
 $redis = new Redis();
@@ -32,4 +29,3 @@ if ($execute) {
 } else {
     echo "没获得锁也没执行" . PHP_EOL;
 }
-```

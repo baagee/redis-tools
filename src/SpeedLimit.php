@@ -51,4 +51,23 @@ final class SpeedLimit extends RedisToolsBase
         $res = $this->redisObject->evalSha(self::$speedLimitSha, $params, 1);
         return boolval($res);
     }
+
+    /**
+     * 尝试执行
+     * @param callable $func     详细执行的逻辑
+     * @param string   $userId   用户
+     * @param string   $action   动作
+     * @param int      $period   期限
+     * @param int      $maxCount 最大次数
+     * @return bool true:可以执行并执行了；false:不可以执行 也没执行
+     */
+    public function run(callable $func, $userId, $action, int $period, int $maxCount)
+    {
+        if ($this->isAllow($userId, $action, $period, $maxCount)) {
+            call_user_func($func);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -77,7 +77,8 @@ class TokenBucket extends RedisToolsBase
     public function getToken($action)
     {
         $key = sprintf("%s:%s", self::TOKEN_BUCKET_KEY_PREFIX, $action);
-        $params = [$key, $this->bucketCapacity, $this->leakingRate, intval(microtime(true) * 1000)];
+        // $params = [$key, $this->bucketCapacity, $this->leakingRate, intval(microtime(true) * 1000)];
+        $params = [$key, $this->bucketCapacity, $this->leakingRate];
         $res = $this->redisObject->evalSha(self::$tokenBucketSha, $params, 1);
         return boolval($res);
     }

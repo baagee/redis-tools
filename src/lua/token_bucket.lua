@@ -8,9 +8,9 @@ redis.replicate_commands()
 local rate_limit_info = redis.call("HGETALL", _key)
 
 -- 获取当前时间戳
--- local timestamp = redis.call("TIME")
--- local now = math.floor((timestamp[1] * 1000000 + timestamp[2]) / 1000)
-local now = tonumber(ARGV[3])
+local timestamp = redis.call("TIME")
+local now = math.floor((timestamp[1] * 1000000 + timestamp[2]) / 1000)
+-- local now = tonumber(ARGV[3])
 
 
 if #rate_limit_info == 0 then -- 没有设置限流配置,则默认拿到令牌 同时设置桶数量是容量-1

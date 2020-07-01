@@ -14,7 +14,7 @@ $bucket = \BaAGee\RedisTools\TokenBucket::getInstance($redis);
 //方式1
 $action = 'eat';
 //设置桶容量 设置添加令牌的速度（每毫秒添加几个）
-$bucket->setCapacity(100)->setLeakingRate(1);
+$bucket->setCapacity(1)->setLeakingRate(1);
 for ($i = 0; $i < 1000; $i++) {
     $res = $bucket->getToken($action);
     echo ($res ? '可以' : '不可以') . $action . PHP_EOL;

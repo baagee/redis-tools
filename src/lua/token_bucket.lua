@@ -5,7 +5,7 @@ local _key=KEYS[1]
 redis.replicate_commands()
 
 -- 获取令牌桶的配置信息
-local rate_limit_info = redis.call("HGETALL", KEYS[1])
+local rate_limit_info = redis.call("HGETALL", _key)
 
 -- 获取当前时间戳
 -- local timestamp = redis.call("TIME")
@@ -14,7 +14,7 @@ local now = tonumber(ARGV[3])
 
 
 if #rate_limit_info == 0 then -- 没有设置限流配置,则默认拿到令牌 同时设置桶数量是容量-1
-    redis.call("HMSET", KEYS[1], "token", capacity - 1, "time", now)
+    redis.call("HMSET", _key, "token", capacity - 1, "time", now)
     return true
 end
 
@@ -42,6 +42,6 @@ if (current_size > 0) then
 end
 
 -- 更新令牌桶的配置信息
-redis.call("HMSET", KEYS[1], "token", current_size, "time", last_leaking_time)
+redis.call("HMSET", _key, "token", current_size, "time", last_leaking_time)
 
 return  result

@@ -5,6 +5,7 @@ local _end= tonumber(ARGV[3])
 local _period= tonumber(ARGV[4])
 local _max= tonumber(ARGV[5])
 
+redis.replicate_commands()
 redis.call('ZREMRANGEBYSCORE',_key, 0, _end)
 local _count=redis.call('ZCARD', _key)
 if (_count>=_max) then

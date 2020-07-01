@@ -2,7 +2,8 @@
 
 Redis distributed lock and current limiter
 
-结合redis实现的分布式锁和限流器
+结合redis实现的分布式锁和限流器,令牌桶
+
 
 
 ## Redis分布式抢占锁用法
@@ -57,5 +58,31 @@ for ($i = 0; $i < 100; $i++) {
 
     echo ($res ? '已经买完了' : '不能买') . $i . PHP_EOL;
     usleep(1000000);
+}
+```
+
+## 令牌桶
+```php
+include __DIR__ . '/../vendor/autoload.php';
+
+$redis = new Redis();
+$redis->connect('127.0.0.1', 6379);
+
+$bucket = \BaAGee\RedisTools\TokenBucket::getInstance($redis);
+//方式1
+$action = 'eat';
+//设置桶容量 设置添加令牌的速度（每毫秒添加几个）
+$bucket->setCapacity(100)->setLeakingRate(1);
+for ($i = 0; $i < 1000; $i++) {
+    $res = $bucket->getToken($action);
+    echo ($res ? '可以' : '不可以') . $action . PHP_EOL;
+}
+// 方式2
+
+for ($i = 0; $i < 1000; $i++) {
+    $res = $bucket->run(function () use ($action) {
+        echo '小明' . $action . PHP_EOL;
+    }, $action);
+    echo ($res ? 'success' : 'failed') . PHP_EOL;
 }
 ```

@@ -1,6 +1,6 @@
 <?php
 /**
- * Desc: 基于redis的限速器
+ * Desc: 基于redis的限速器 主要是用到了滑动时间窗口
  * User: baagee
  * Date: 2020/3/28
  * Time: 下午9:29
